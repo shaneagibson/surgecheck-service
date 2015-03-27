@@ -21,7 +21,7 @@ public class SurgeStatusRowMapper implements RowMapper<SurgeStatus> {
                 new Coordinates(
                         row.getDecimal("latitude"),
                         row.getDecimal("longitude")),
-                new BigDecimal(row.getFloat("surge_multiplier")).setScale(1, RoundingMode.HALF_UP));
+                new BigDecimal(row.getFloat("surge_multiplier")).setScale(2, RoundingMode.HALF_UP));
     }
 
 }
