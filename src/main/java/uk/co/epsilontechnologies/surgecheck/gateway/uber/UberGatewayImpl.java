@@ -52,7 +52,7 @@ public class UberGatewayImpl implements UberGateway {
                 final JSONObject priceJson = (JSONObject) pricesJson.get(i);
                 final String product = (String) priceJson.get("display_name");
                 if (product != null && product.equals("uberX")) {
-                    §return new BigDecimal((Double) priceJson.get("surge_multiplier")).setScale(2, RoundingMode.HALF_UP);
+                    return new BigDecimal((Double) priceJson.get("surge_multiplier")).setScale(2, RoundingMode.HALF_UP);
                 }
             }
             return BigDecimal.ONE;
