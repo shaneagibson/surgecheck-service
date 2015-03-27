@@ -31,7 +31,7 @@ public class AppConfiguration {
         final PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
         propertySourcesPlaceholderConfigurer.setLocations(
                 new ClassPathResource("config/base.properties"),
-                new ClassPathResource("config/"+System.getProperty("ENV.NAME")+".properties"));
+                new ClassPathResource("config/"+System.getProperty("env.name")+".properties"));
         return propertySourcesPlaceholderConfigurer;
     }
 
