@@ -8,6 +8,7 @@ import uk.co.epsilontechnologies.surgecheck.model.Coordinates;
 import uk.co.epsilontechnologies.surgecheck.model.SurgeStatus;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Component
@@ -20,7 +21,7 @@ public class SurgeStatusRowMapper implements RowMapper<SurgeStatus> {
                 new Coordinates(
                         row.getDecimal("latitude"),
                         row.getDecimal("longitude")),
-                new BigDecimal(row.getFloat("surge_multiplier")).setScale(1));
+                new BigDecimal(row.getFloat("surge_multiplier")).setScale(1, RoundingMode.HALF_UP));
     }
 
 }

@@ -12,6 +12,7 @@ import uk.co.epsilontechnologies.surgecheck.model.Coordinates;
 import uk.co.epsilontechnologies.surgecheck.model.SurgeStatus;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URI;
 import java.util.Date;
 
@@ -43,13 +44,15 @@ public class UberGatewayImpl implements UberGateway {
 
     private BigDecimal resolveSurgeMultiplier(final ResponseEntity<String> response) {
         try {
-            final JSONObject responseJson = new JSONObject(response.getBody());
+            final String responseBodyString = response.getBody();
+            System.out.println("Response from UBER:"+responseBodyString);
+            final JSONObject responseJson = new JSONObject(responseBodyString);
             final JSONArray pricesJson = responseJson.getJSONArray("prices");
             for (int i = 0; i < pricesJson.length(); i++) {
                 final JSONObject priceJson = (JSONObject) pricesJson.get(i);
                 final String product = (String) priceJson.get("display_name");
                 if (product != null && product.equals("uberX")) {
-                    return new BigDecimal((Double) priceJson.get("surge_multiplier")).setScale(1);
+                    §return new BigDecimal((Double) priceJson.get("surge_multiplier")).setScale(2, RoundingMode.HALF_UP);
                 }
             }
             return BigDecimal.ONE;
