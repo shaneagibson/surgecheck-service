@@ -35,10 +35,10 @@ public class Grid {
     }
 
     public boolean contains(final Coordinates coordinates) {
-        return (coordinates.getLatitude().compareTo(southWest.getLatitude()) == -1 &&
-            coordinates.getLatitude().compareTo(northEast.getLatitude()) == 1 &&
-            coordinates.getLongitude().compareTo(southWest.getLongitude()) == -1 &&
-            coordinates.getLongitude().compareTo(northEast.getLongitude()) == 1);
+        return (coordinates.getLatitude().compareTo(southWest.getLatitude()) == 1 &&
+            coordinates.getLatitude().compareTo(northEast.getLatitude()) == -1 &&
+            coordinates.getLongitude().compareTo(southWest.getLongitude()) == 1 &&
+            coordinates.getLongitude().compareTo(northEast.getLongitude()) == -1);
     }
 
     @Override

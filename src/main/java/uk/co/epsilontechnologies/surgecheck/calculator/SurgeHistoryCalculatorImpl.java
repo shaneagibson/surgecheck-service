@@ -67,9 +67,9 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
         final Date start = roundToMinutes(addMinutes(now, -180), 10);
         final Date end = roundToMinutes(addMinutes(now, 180), 10);
 
-        Date timestamp = new Date(start.getTime());
-
         final Map<Date,List<BigDecimal>> surgeMultiplierBuckets = new HashMap<>();
+
+        Date timestamp = new Date(start.getTime());
 
         while (timestamp.getTime() < end.getTime()) {
             surgeMultiplierBuckets.put(timestamp, new ArrayList<>());
@@ -90,8 +90,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                 classifyTimestamp(addMinutes(now, -180)));
         return surgeStatusList
                 .stream()
-                .filter(surgeStatus ->
-                        classificationsToReport.contains(classifyTimestamp(surgeStatus.getTimestamp())))
+                .filter(surgeStatus -> classificationsToReport.contains(classifyTimestamp(surgeStatus.getTimestamp())))
                 .collect(Collectors.toList());
     }
 
