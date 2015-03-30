@@ -57,13 +57,8 @@ public class SurgeCheckServiceImpl implements SurgeCheckService {
         if (!grid.contains(coordinates)) {
             throw new CoordinatesOutOfBoundsException();
         }
-        // TODO - prevent lookup if there is already a recent lookup
-        final SurgeStatus surgeStatus = uberGateway.getSurgeStatus(coordinates);
-        surgeCheckDao.persistSurgeStatus(surgeStatus);
-        final BigDecimal current = surgeStatus.getSurgeMultiplier();
-
+        final BigDecimal current = lookupRealTimeSurgeMultiplier(coordinates);
         final List<Metrics> historic = surgeHistoryCache.lookup(coordinates.scale());
-
         return new SurgeCheckResponse(current, historic);
     }
 
@@ -77,6 +72,12 @@ public class SurgeCheckServiceImpl implements SurgeCheckService {
             });
         }
         executorService.shutdown();
+    }
+
+    private BigDecimal lookupRealTimeSurgeMultiplier(final Coordinates coordinates) {
+        final SurgeStatus surgeStatus = uberGateway.getSurgeStatus(coordinates);
+        surgeCheckDao.persistSurgeStatus(surgeStatus);
+        return surgeStatus.getSurgeMultiplier();
     }
 
 }

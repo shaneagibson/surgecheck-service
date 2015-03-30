@@ -36,7 +36,7 @@ public class Coordinates {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         return EqualsBuilder.reflectionEquals(this, o);
     }
 
