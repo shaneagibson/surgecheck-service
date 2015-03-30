@@ -21,34 +21,33 @@ public class SurgeCheckDaoImpl implements SurgeCheckDao {
 
     private final CassandraOperations cassandraOperations;
     private final SurgeStatusRowMapper surgeStatusRowMapper;
+    private final SurgeStatusTableNameFormatter surgeStatusTableNameFormatter;
     private final int timeToLive;
 
     @Autowired
     public SurgeCheckDaoImpl(
             final CassandraOperations cassandraOperations,
             final SurgeStatusRowMapper surgeStatusRowMapper,
+            final SurgeStatusTableNameFormatter surgeStatusTableNameFormatter,
             @Value("${surgecheck.ttl}") final int timeToLive) {
         this.cassandraOperations = cassandraOperations;
         this.surgeStatusRowMapper = surgeStatusRowMapper;
+        this.surgeStatusTableNameFormatter = surgeStatusTableNameFormatter;
         this.timeToLive = timeToLive;
     }
 
     @Override
     public void persistSurgeStatus(final SurgeStatus surgeStatus) {
-        final String tableName = resolveTableName(surgeStatus.getCoordinates());
+        final String tableName = surgeStatusTableNameFormatter.format(surgeStatus.getCoordinates());
         insertSurgeStatus(tableName, surgeStatus);
     }
 
     @Override
     public List<SurgeStatus> fetchSurgeStatus(final Coordinates coordinates) {
-        final String tableName = resolveTableName(coordinates);
+        final String tableName = surgeStatusTableNameFormatter.format(coordinates);
         final Select select = select("timestamp", "latitude", "longitude", "surge_multiplier").from(tableName);
         select.setConsistencyLevel(ConsistencyLevel.ONE);
         return cassandraOperations.query(select, surgeStatusRowMapper);
-    }
-
-    private String resolveTableName(final Coordinates coordinates) {
-        return "surge_" + stringifyCoordinate(coordinates.getLatitude())+"_"+stringifyCoordinate(coordinates.getLongitude());
     }
 
     private void insertSurgeStatus(final String tableName, final SurgeStatus surgeStatus) {
@@ -60,14 +59,6 @@ public class SurgeCheckDaoImpl implements SurgeCheckDao {
         insert.value("timestamp", surgeStatus.getTimestamp().getTime());
         insert.using(QueryBuilder.ttl(timeToLive));
         cassandraOperations.execute(insert);
-    }
-
-    private String stringifyCoordinate(final BigDecimal coordinate) {
-        String stringValue = String.valueOf(coordinate.movePointRight(2).abs());
-        while (stringValue.length() < 4) {
-            stringValue = "0" + stringValue;
-        }
-        return coordinate.signum() == -1 ? "n" + stringValue : stringValue;
     }
 
 }

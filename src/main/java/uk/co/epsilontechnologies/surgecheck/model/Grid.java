@@ -1,5 +1,9 @@
 package uk.co.epsilontechnologies.surgecheck.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,21 @@ public class Grid {
             coordinates.getLatitude().compareTo(northEast.getLatitude()) == 1 &&
             coordinates.getLongitude().compareTo(southWest.getLongitude()) == -1 &&
             coordinates.getLongitude().compareTo(northEast.getLongitude()) == 1);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 
 }

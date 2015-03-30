@@ -19,12 +19,12 @@ import java.util.concurrent.Executors;
 @Service
 public class SurgeCheckServiceImpl implements SurgeCheckService {
 
-
     private final UberGateway uberGateway;
     private final SurgeCheckDao surgeCheckDao;
     private final Grid grid;
     private final SurgeHistoryCache surgeHistoryCache;
     private final SurgeHistoryCalculator surgeHistoryCalculator;
+    private final int threadPoolSize;
 
     @Autowired
     public SurgeCheckServiceImpl(
@@ -32,17 +32,19 @@ public class SurgeCheckServiceImpl implements SurgeCheckService {
             final SurgeCheckDao surgeCheckDao,
             final Grid grid,
             final SurgeHistoryCache surgeHistoryCache,
-            final SurgeHistoryCalculator surgeHistoryCalculator) {
+            final SurgeHistoryCalculator surgeHistoryCalculator,
+            @Value("threadpool.size") final int threadPoolSize) {
         this.uberGateway = uberGateway;
         this.surgeCheckDao = surgeCheckDao;
         this.grid = grid;
         this.surgeHistoryCache = surgeHistoryCache;
         this.surgeHistoryCalculator = surgeHistoryCalculator;
+        this.threadPoolSize = threadPoolSize;
     }
 
     @Override
     public void populateMetrics() {
-        final ExecutorService executorService = Executors.newFixedThreadPool(10);
+        final ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
         for (final Coordinates coordinates : grid.getAllCoordinates()) {
             executorService.execute(() -> {
                 final SurgeStatus surgeStatus = uberGateway.getSurgeStatus(coordinates);
@@ -64,7 +66,7 @@ public class SurgeCheckServiceImpl implements SurgeCheckService {
 
     @Override
     public void updateMetricsCache() {
-        final ExecutorService executorService = Executors.newFixedThreadPool(10);
+        final ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
         for (final Coordinates coordinates : grid.getAllCoordinates()) {
             executorService.execute(() -> {
                 final List<Metrics> historic = surgeHistoryCalculator.calculate(coordinates);
