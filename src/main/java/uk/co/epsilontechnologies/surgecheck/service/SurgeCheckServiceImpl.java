@@ -33,7 +33,7 @@ public class SurgeCheckServiceImpl implements SurgeCheckService {
             final Grid grid,
             final SurgeHistoryCache surgeHistoryCache,
             final SurgeHistoryCalculator surgeHistoryCalculator,
-            @Value("threadpool.size") final int threadPoolSize) {
+            @Value("${threadpool.size}") final int threadPoolSize) {
         this.uberGateway = uberGateway;
         this.surgeCheckDao = surgeCheckDao;
         this.grid = grid;
