@@ -17,7 +17,6 @@ public class PopulateMetricsJob {
 
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
     public void run() {
-        System.out.println("----- Populating Metrics from Uber");
         surgeCheckService.populateMetrics();
     }
 

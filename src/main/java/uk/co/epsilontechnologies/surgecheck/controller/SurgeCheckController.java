@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import uk.co.epsilontechnologies.surgecheck.error.CoordinatesOutOfBoundsException;
 import uk.co.epsilontechnologies.surgecheck.model.Coordinates;
 import uk.co.epsilontechnologies.surgecheck.model.SurgeCheckResponse;
 import uk.co.epsilontechnologies.surgecheck.service.SurgeCheckService;
@@ -29,8 +30,16 @@ public class SurgeCheckController {
             params = { "latitude", "longitude" })
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public SurgeCheckResponse checkStatus(@RequestParam final BigDecimal latitude, @RequestParam final BigDecimal longitude) {
+    public SurgeCheckResponse checkStatus(@RequestParam final BigDecimal latitude, @RequestParam final BigDecimal longitude) throws CoordinatesOutOfBoundsException {
         return surgeCheckService.check(new Coordinates(latitude, longitude));
     }
+
+    @ExceptionHandler(CoordinatesOutOfBoundsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handleCoordinatesOutOfBoundsException(final CoordinatesOutOfBoundsException e) { }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public void handleRuntimeException(final RuntimeException e) { }
 
 }

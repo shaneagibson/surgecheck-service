@@ -45,7 +45,6 @@ public class UberGatewayImpl implements UberGateway {
     private BigDecimal resolveSurgeMultiplier(final ResponseEntity<String> response) {
         try {
             final String responseBodyString = response.getBody();
-            System.out.println("Response from UBER:"+responseBodyString);
             final JSONObject responseJson = new JSONObject(responseBodyString);
             final JSONArray pricesJson = responseJson.getJSONArray("prices");
             for (int i = 0; i < pricesJson.length(); i++) {

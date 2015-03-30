@@ -12,8 +12,14 @@ public class Coordinates {
     private final BigDecimal longitude;
 
     public Coordinates(final BigDecimal latitude, final BigDecimal longitude) {
-        this.latitude = latitude.setScale(2, RoundingMode.HALF_UP);
-        this.longitude = longitude.setScale(2, RoundingMode.HALF_UP);
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Coordinates scale() {
+        return new Coordinates(
+                this.latitude.setScale(2, RoundingMode.HALF_UP),
+                this.longitude.setScale(2, RoundingMode.HALF_UP));
     }
 
     public BigDecimal getLatitude() {

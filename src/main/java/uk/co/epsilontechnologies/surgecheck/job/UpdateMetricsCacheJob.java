@@ -18,7 +18,6 @@ public class UpdateMetricsCacheJob {
 
     @Scheduled(cron = "0 5,15,25,35,45,55 * * * *")
     public void run() {
-        System.out.println("----- Updating Metrics Cache");
         surgeCheckService.updateMetricsCache();
     }
 
