@@ -35,13 +35,21 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
         final List<SurgeStatus> surgeStatusRecords = getSurgeStatusRecords(coordinates, now);
 
+        System.out.println("surgeStatusRecords:"+surgeStatusRecords.size());
+
         final Map<Date,List<BigDecimal>> surgeMultiplierBuckets = initializeSurgeMultiplierBuckets(now);
 
         for (final SurgeStatus surgeStatus : surgeStatusRecords) {
             surgeMultiplierBuckets.get(roundToMinutes(surgeStatus.getTimestamp(), 10)).add(surgeStatus.getSurgeMultiplier());
         }
 
-        return convertToMetricsList(surgeMultiplierBuckets);
+        System.out.println("surgeStatusRecords:"+surgeStatusRecords.size());
+
+        final List<Metrics> metrics = convertToMetricsList(surgeMultiplierBuckets);
+
+        System.out.println("metrics:"+metrics.size());
+
+        return metrics;
     }
 
     private List<Metrics> convertToMetricsList(final Map<Date, List<BigDecimal>> surgeMultiplierBuckets) {
