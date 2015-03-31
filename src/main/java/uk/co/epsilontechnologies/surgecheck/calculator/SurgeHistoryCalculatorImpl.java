@@ -44,9 +44,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
             }
         }
 
-        final List<Metrics> metrics = convertToMetricsList(surgeMultiplierBuckets);
-
-        return metrics;
+        return convertToMetricsList(surgeMultiplierBuckets);
     }
 
     private List<Metrics> convertToMetricsList(final Map<Date, List<BigDecimal>> surgeMultiplierBuckets) {
@@ -64,7 +62,18 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                                 new BigDecimal(descriptiveStatistics.getPercentile(25))));
             }
         }
-        return metricsList;
+        return sort(metricsList);
+    }
+
+    private List<Metrics> sort(final List<Metrics> metricsList) {
+        final List<Metrics> sortedList = new ArrayList<>(metricsList);
+        sortedList.sort(new Comparator<Metrics>() {
+            @Override
+            public int compare(final Metrics o1, final Metrics o2) {
+                return new Long(o1.getTimestamp()).compareTo(o2.getTimestamp());
+            }
+        });
+        return sortedList;
     }
 
     private Map<Date, List<BigDecimal>> initializeSurgeMultiplierBuckets(final Date now) {
