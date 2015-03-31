@@ -1,6 +1,7 @@
 package uk.co.epsilontechnologies.surgecheck.repository;
 
 import com.datastax.driver.core.ConsistencyLevel;
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import uk.co.epsilontechnologies.surgecheck.model.Coordinates;
 import uk.co.epsilontechnologies.surgecheck.model.SurgeStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
@@ -44,10 +46,9 @@ public class SurgeCheckDaoImpl implements SurgeCheckDao {
     @Override
     public List<SurgeStatus> fetchSurgeStatus(final Coordinates coordinates) {
         final String tableName = surgeStatusTableNameFormatter.format(coordinates);
-        final Select select = select("timestamp", "latitude", "longitude", "surge_multiplier").from("epsilon", tableName);
-        final List<SurgeStatus> result = cassandraOperations.query(select, surgeStatusRowMapper);
-        System.out.println(tableName+" => "+result.size());
-        return result;
+        final ResultSet resultSet = cassandraOperations.query("SELECT timestamp, latitude, longitude, surge_multiplier FROM "+tableName);
+        System.out.println(tableName+" => "+resultSet.all().size());
+        return new ArrayList<>();
     }
 
     private void insertSurgeStatus(final String tableName, final SurgeStatus surgeStatus) {
