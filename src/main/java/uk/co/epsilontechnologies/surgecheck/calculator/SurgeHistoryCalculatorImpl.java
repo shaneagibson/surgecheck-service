@@ -38,7 +38,10 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
         final Map<Date,List<BigDecimal>> surgeMultiplierBuckets = initializeSurgeMultiplierBuckets(now);
 
         for (final SurgeStatus surgeStatus : surgeStatusRecords) {
-            surgeMultiplierBuckets.get(roundToMinutes(surgeStatus.getTimestamp(), 10)).add(surgeStatus.getSurgeMultiplier());
+            final Date timestampForBucket = roundToMinutes(surgeStatus.getTimestamp(), 10);
+            if (surgeMultiplierBuckets.containsKey(timestampForBucket)) {
+                surgeMultiplierBuckets.get(timestampForBucket).add(surgeStatus.getSurgeMultiplier());
+            }
         }
 
         final List<Metrics> metrics = convertToMetricsList(surgeMultiplierBuckets);
