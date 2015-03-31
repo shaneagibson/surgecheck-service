@@ -48,15 +48,16 @@ public class SurgeCheckDaoImpl implements SurgeCheckDao {
 
     @Override
     public List<SurgeStatus> fetchSurgeStatus(final Coordinates coordinates) {
-        final String tableName = surgeStatusTableNameFormatter.format(coordinates);
-        final ResultSet resultSet = cassandraOperations.query("SELECT timestamp, latitude, longitude, surge_multiplier FROM "+tableName);
-        final Iterator<Row> iterator = resultSet.all().iterator();
-        final List<SurgeStatus> result = new ArrayList<>();
-        while (iterator.hasNext()) {
-            final Row row = iterator.next();
-            result.add(surgeStatusRowMapper.mapRow(row, 0));
-        }
-        return result;
+//        final String tableName = surgeStatusTableNameFormatter.format(coordinates);
+//        final ResultSet resultSet = cassandraOperations.query("SELECT timestamp, latitude, longitude, surge_multiplier FROM "+tableName);
+//        final Iterator<Row> iterator = resultSet.all().iterator();
+//        final List<SurgeStatus> result = new ArrayList<>();
+//        while (iterator.hasNext()) {
+//            final Row row = iterator.next();
+//            result.add(surgeStatusRowMapper.mapRow(row, 0));
+//        }
+//        return result;
+        return new ArrayList<>();
     }
 
     private void insertSurgeStatus(final String tableName, final SurgeStatus surgeStatus) {
