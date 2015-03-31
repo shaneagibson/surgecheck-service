@@ -35,19 +35,13 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
         final List<SurgeStatus> surgeStatusRecords = getSurgeStatusRecords(coordinates, now);
 
-        System.out.println("surgeStatusRecords:"+surgeStatusRecords.size());
-
         final Map<Date,List<BigDecimal>> surgeMultiplierBuckets = initializeSurgeMultiplierBuckets(now);
 
         for (final SurgeStatus surgeStatus : surgeStatusRecords) {
             surgeMultiplierBuckets.get(roundToMinutes(surgeStatus.getTimestamp(), 10)).add(surgeStatus.getSurgeMultiplier());
         }
 
-        System.out.println("surgeStatusRecords:"+surgeStatusRecords.size());
-
         final List<Metrics> metrics = convertToMetricsList(surgeMultiplierBuckets);
-
-        System.out.println("metrics:"+metrics.size());
 
         return metrics;
     }
@@ -88,7 +82,6 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
     private List<SurgeStatus> getSurgeStatusRecords(final Coordinates coordinates, final Date now) {
         final List<SurgeStatus> surgeStatusList = surgeCheckDao.fetchSurgeStatus(coordinates);
-        System.out.println("all:"+surgeStatusList.size());
         final List<String> classificationsToReport = Arrays.asList(
                 classifyTimestamp(addMinutes(now, 180)),
                 classifyTimestamp(addMinutes(now, 120)),
