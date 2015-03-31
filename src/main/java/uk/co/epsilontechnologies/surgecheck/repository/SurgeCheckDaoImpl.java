@@ -47,7 +47,7 @@ public class SurgeCheckDaoImpl implements SurgeCheckDao {
         final String tableName = surgeStatusTableNameFormatter.format(coordinates);
         System.out.println(tableName);
         final Select select = select("timestamp", "latitude", "longitude", "surge_multiplier").from(tableName);
-        select.setConsistencyLevel(ConsistencyLevel.ANY);
+        select.setConsistencyLevel(ConsistencyLevel.ONE);
         final List<SurgeStatus> result = cassandraOperations.query(select, surgeStatusRowMapper);
         System.out.println(tableName+" = "+result.size());
         return result;
