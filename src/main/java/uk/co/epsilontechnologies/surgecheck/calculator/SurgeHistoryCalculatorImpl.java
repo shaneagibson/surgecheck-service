@@ -88,6 +88,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
     private List<SurgeStatus> getSurgeStatusRecords(final Coordinates coordinates, final Date now) {
         final List<SurgeStatus> surgeStatusList = surgeCheckDao.fetchSurgeStatus(coordinates);
+        System.out.println("all:"+surgeStatusList.size());
         final List<String> classificationsToReport = Arrays.asList(
                 classifyTimestamp(addMinutes(now, 180)),
                 classifyTimestamp(addMinutes(now, 120)),
