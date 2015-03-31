@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import uk.co.epsilontechnologies.surgecheck.model.Coordinates;
 import uk.co.epsilontechnologies.surgecheck.model.SurgeStatus;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.*;
@@ -45,11 +44,9 @@ public class SurgeCheckDaoImpl implements SurgeCheckDao {
     @Override
     public List<SurgeStatus> fetchSurgeStatus(final Coordinates coordinates) {
         final String tableName = surgeStatusTableNameFormatter.format(coordinates);
-        System.out.println(tableName);
-        final Select select = select("timestamp", "latitude", "longitude", "surge_multiplier").from(tableName);
-        select.setConsistencyLevel(ConsistencyLevel.ONE);
+        final Select select = select("timestamp", "latitude", "longitude", "surge_multiplier").from("epsilon", tableName);
         final List<SurgeStatus> result = cassandraOperations.query(select, surgeStatusRowMapper);
-        System.out.println(tableName+" = "+result.size());
+        System.out.println(tableName+" => "+result.size());
         return result;
     }
 
