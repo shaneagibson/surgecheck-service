@@ -12,12 +12,14 @@ public class Metrics {
     private final BigDecimal high;
     private final BigDecimal avg;
     private final BigDecimal low;
+    private final int count;
 
-    public Metrics(final long timestamp, final BigDecimal high, final BigDecimal avg, final BigDecimal low) {
+    public Metrics(final long timestamp, final BigDecimal high, final BigDecimal avg, final BigDecimal low, final int count) {
         this.timestamp = timestamp;
         this.high = high;
         this.avg = avg;
         this.low = low;
+        this.count = count;
     }
 
     public long getTimestamp() {
@@ -34,6 +36,10 @@ public class Metrics {
 
     public BigDecimal getLow() {
         return low;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     @Override
