@@ -51,15 +51,17 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
         final List<Metrics> metricsList = new ArrayList<>();
         for (final Date timestamp : surgeMultiplierBuckets.keySet()) {
             final List<BigDecimal> surgeMultipliers = surgeMultiplierBuckets.get(timestamp);
-            final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
-            surgeMultipliers.forEach(bigDecimal -> descriptiveStatistics.addValue(bigDecimal.floatValue()));
-            metricsList.add(
-                    new Metrics(
-                            timestamp.getTime(),
-                            new BigDecimal(descriptiveStatistics.getPercentile(75)),
-                            new BigDecimal(descriptiveStatistics.getMean()),
-                            new BigDecimal(descriptiveStatistics.getPercentile(25)),
-                            surgeMultipliers.size()));
+            if (!surgeMultipliers.isEmpty()) {
+                final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
+                surgeMultipliers.forEach(bigDecimal -> descriptiveStatistics.addValue(bigDecimal.floatValue()));
+                metricsList.add(
+                        new Metrics(
+                                timestamp.getTime(),
+                                new BigDecimal(descriptiveStatistics.getPercentile(75)),
+                                new BigDecimal(descriptiveStatistics.getMean()),
+                                new BigDecimal(descriptiveStatistics.getPercentile(25)),
+                                surgeMultipliers.size()));
+            }
         }
         return sort(metricsList);
     }
