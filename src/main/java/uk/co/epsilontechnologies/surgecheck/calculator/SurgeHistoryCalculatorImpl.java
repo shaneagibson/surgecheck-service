@@ -96,7 +96,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
         while (timestamp.getTime() < end.getTime()) {
             surgeMultiplierBuckets.put(timestamp, new ArrayList<>());
-            timestamp = addMinutes(timestamp, 5);
+            timestamp = addMinutes(timestamp, 10);
         }
         return surgeMultiplierBuckets;
     }
