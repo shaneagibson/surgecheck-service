@@ -65,9 +65,9 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                 metricsList.add(
                         new Metrics(
                                 timestamp.getTime(),
-                                new BigDecimal("1.25"),
                                 new BigDecimal("1.0"),
-                                new BigDecimal("0.75"),
+                                new BigDecimal("1.0"),
+                                new BigDecimal("1.0"),
                                 1));
             }
         }
