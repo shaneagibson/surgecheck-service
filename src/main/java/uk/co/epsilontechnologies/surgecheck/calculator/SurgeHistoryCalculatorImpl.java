@@ -61,6 +61,14 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                                 new BigDecimal(descriptiveStatistics.getMean()),
                                 new BigDecimal(descriptiveStatistics.getPercentile(25)),
                                 surgeMultipliers.size()));
+            } else {
+                metricsList.add(
+                        new Metrics(
+                                timestamp.getTime(),
+                                new BigDecimal("1.25"),
+                                new BigDecimal("1.0"),
+                                new BigDecimal("0.75"),
+                                1));
             }
         }
         return sort(metricsList);
