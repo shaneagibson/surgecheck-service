@@ -50,11 +50,12 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
     private List<Metrics> convertToMetricsList(final Map<Date, List<BigDecimal>> surgeMultiplierBuckets) {
         final List<Metrics> metricsList = new ArrayList<>();
-        System.out.println("-----------");
+        StringBuilder sb = new StringBuilder();
+        sb.append("--------");
         for (final Date timestamp : surgeMultiplierBuckets.keySet()) {
             final List<BigDecimal> surgeMultipliers = surgeMultiplierBuckets.get(timestamp);
             if (!surgeMultipliers.isEmpty()) {
-                System.out.println(timestamp+" => "+StringUtils.join(surgeMultipliers, ","));
+                sb.append(timestamp+" => "+StringUtils.join(surgeMultipliers, ","));
                 final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
                 surgeMultipliers.forEach(bigDecimal -> descriptiveStatistics.addValue(bigDecimal.floatValue()));
                 metricsList.add(
@@ -74,7 +75,8 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                                 1));
             }
         }
-        System.out.println("-----------");
+        sb.append("--------");
+        System.out.println(sb.toString());
         return sort(metricsList);
     }
 
