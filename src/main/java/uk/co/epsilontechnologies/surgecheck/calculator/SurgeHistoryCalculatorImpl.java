@@ -40,9 +40,11 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
         for (final SurgeStatus surgeStatus : surgeStatusRecords) {
             final Date surgeStatusBucketTimestamp = roundToMinutes(surgeStatus.getTimestamp(), 10);
-            if (surgeMultiplierBuckets.containsKey(surgeStatusBucketTimestamp)) {
-                surgeMultiplierBuckets.get(surgeStatusBucketTimestamp).add(surgeStatus.getSurgeMultiplier());
-            }
+            surgeMultiplierBuckets
+                    .keySet()
+                    .stream()
+                    .filter(bucketKey -> classifyTimestamp(bucketKey).equals(classifyTimestamp(surgeStatusBucketTimestamp)))
+                    .forEach(bucketKey -> surgeMultiplierBuckets.get(bucketKey).add(surgeStatus.getSurgeMultiplier()));
         }
 
         return convertToMetricsList(surgeMultiplierBuckets);
@@ -50,12 +52,9 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
     private List<Metrics> convertToMetricsList(final Map<Date, List<BigDecimal>> surgeMultiplierBuckets) {
         final List<Metrics> metricsList = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n--------");
         for (final Date timestamp : surgeMultiplierBuckets.keySet()) {
             final List<BigDecimal> surgeMultipliers = surgeMultiplierBuckets.get(timestamp);
             if (!surgeMultipliers.isEmpty()) {
-                sb.append("\n"+timestamp+" => "+StringUtils.join(surgeMultipliers, ","));
                 final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
                 surgeMultipliers.forEach(bigDecimal -> descriptiveStatistics.addValue(bigDecimal.floatValue()));
                 metricsList.add(
@@ -75,8 +74,6 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                                 1));
             }
         }
-        sb.append("\n--------");
-        System.out.println(sb.toString());
         return sort(metricsList);
     }
 
