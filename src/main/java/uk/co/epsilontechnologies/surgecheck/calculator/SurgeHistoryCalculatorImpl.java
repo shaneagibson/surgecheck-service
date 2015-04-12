@@ -61,7 +61,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                         new Metrics(
                                 timestamp.getTime(),
                                 new BigDecimal(mean + standardDeviation),
-                                new BigDecimal(descriptiveStatistics.getMean()),
+                                new BigDecimal(mean),
                                 new BigDecimal(Math.max(1, mean - standardDeviation)),
                                 surgeMultipliers.size()));
             } else {
