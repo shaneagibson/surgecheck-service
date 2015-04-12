@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Component
 public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
-    private static final SimpleDateFormat DAY_HOUR_FORMATTER = new SimpleDateFormat("EEE_hh00");
+    private static final SimpleDateFormat DAY_HOUR_FORMATTER = new SimpleDateFormat("EEE_HH00");
 
     private final SurgeCheckDao surgeCheckDao;
 
@@ -112,8 +112,6 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                 classifyTimestamp(addMinutes(now, -60)),
                 classifyTimestamp(addMinutes(now, -120)),
                 classifyTimestamp(addMinutes(now, -180)));
-        System.out.println(StringUtils.join(classificationsToReport, ","));
-        System.out.println(StringUtils.join(surgeStatusList, ","));
         return surgeStatusList
                 .stream()
                 .filter(surgeStatus -> classificationsToReport.contains(classifyTimestamp(surgeStatus.getTimestamp())))
