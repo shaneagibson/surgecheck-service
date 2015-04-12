@@ -1,5 +1,6 @@
 package uk.co.epsilontechnologies.surgecheck.calculator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -111,6 +112,8 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
                 classifyTimestamp(addMinutes(now, -60)),
                 classifyTimestamp(addMinutes(now, -120)),
                 classifyTimestamp(addMinutes(now, -180)));
+        System.out.println(StringUtils.join(classificationsToReport, ","));
+        System.out.println(StringUtils.join(surgeStatusList, ","));
         return surgeStatusList
                 .stream()
                 .filter(surgeStatus -> classificationsToReport.contains(classifyTimestamp(surgeStatus.getTimestamp())))
