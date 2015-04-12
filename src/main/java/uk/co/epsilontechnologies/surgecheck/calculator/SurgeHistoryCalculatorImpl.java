@@ -36,14 +36,12 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
         final List<SurgeStatus> surgeStatusRecords = getSurgeStatusRecords(coordinates, now);
 
-        System.out.println(StringUtils.join(surgeStatusRecords, ","));
-
         final Map<Date,List<BigDecimal>> surgeMultiplierBuckets = initializeSurgeMultiplierBuckets(now);
 
         for (final SurgeStatus surgeStatus : surgeStatusRecords) {
-            final Date timestampForBucket = roundToMinutes(surgeStatus.getTimestamp(), 10);
-            if (surgeMultiplierBuckets.containsKey(timestampForBucket)) {
-                surgeMultiplierBuckets.get(timestampForBucket).add(surgeStatus.getSurgeMultiplier());
+            final Date surgeStatusBucketTimestamp = roundToMinutes(surgeStatus.getTimestamp(), 10);
+            if (surgeMultiplierBuckets.containsKey(surgeStatusBucketTimestamp)) {
+                surgeMultiplierBuckets.get(surgeStatusBucketTimestamp).add(surgeStatus.getSurgeMultiplier());
             }
         }
 
@@ -55,6 +53,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
         for (final Date timestamp : surgeMultiplierBuckets.keySet()) {
             final List<BigDecimal> surgeMultipliers = surgeMultiplierBuckets.get(timestamp);
             if (!surgeMultipliers.isEmpty()) {
+                System.out.println(timestamp+" => "+StringUtils.join(surgeMultipliers, ","));
                 final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
                 surgeMultipliers.forEach(bigDecimal -> descriptiveStatistics.addValue(bigDecimal.floatValue()));
                 metricsList.add(
