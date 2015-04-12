@@ -55,12 +55,14 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
             if (!surgeMultipliers.isEmpty()) {
                 final DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics();
                 surgeMultipliers.forEach(bigDecimal -> descriptiveStatistics.addValue(bigDecimal.floatValue()));
+                final double mean = descriptiveStatistics.getMean();
+                final double standardDeviation = descriptiveStatistics.getStandardDeviation();
                 metricsList.add(
                         new Metrics(
                                 timestamp.getTime(),
-                                new BigDecimal(descriptiveStatistics.getMean() + descriptiveStatistics.getStandardDeviation()),
+                                new BigDecimal(mean + standardDeviation),
                                 new BigDecimal(descriptiveStatistics.getMean()),
-                                new BigDecimal(descriptiveStatistics.getMean() - descriptiveStatistics.getStandardDeviation()),
+                                new BigDecimal(Math.max(1, mean - standardDeviation)),
                                 surgeMultipliers.size()));
             } else {
                 metricsList.add(
