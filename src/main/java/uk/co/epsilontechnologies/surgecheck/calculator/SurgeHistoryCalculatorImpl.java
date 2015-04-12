@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @Component
 public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
-    private static final SimpleDateFormat DAY_HOUR_FORMATTER = new SimpleDateFormat("EEE_HH00");
-
     private final SurgeCheckDao surgeCheckDao;
 
     @Autowired
@@ -125,7 +123,7 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
     }
 
     private String classifyTimestamp(final Date timestamp) {
-        return DAY_HOUR_FORMATTER.format(timestamp).toUpperCase();
+        return new SimpleDateFormat("EEE_HH00").format(timestamp).toUpperCase();
     }
 
     private Date roundToMinutes(final Date timestamp, final int minutes) {

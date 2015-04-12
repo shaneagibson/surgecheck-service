@@ -10,14 +10,14 @@ public class Metrics {
 
     private final long timestamp;
     private final BigDecimal high;
-    private final BigDecimal avg;
+    private final BigDecimal mid;
     private final BigDecimal low;
     private final int count;
 
-    public Metrics(final long timestamp, final BigDecimal high, final BigDecimal avg, final BigDecimal low, final int count) {
+    public Metrics(final long timestamp, final BigDecimal high, final BigDecimal mid, final BigDecimal low, final int count) {
         this.timestamp = timestamp;
         this.high = high;
-        this.avg = avg;
+        this.mid = mid;
         this.low = low;
         this.count = count;
     }
@@ -30,8 +30,8 @@ public class Metrics {
         return high;
     }
 
-    public BigDecimal getAvg() {
-        return avg;
+    public BigDecimal getMid() {
+        return mid;
     }
 
     public BigDecimal getLow() {
