@@ -28,7 +28,9 @@ public class SurgeCheckController {
             params = { "latitude", "longitude" })
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public SurgeCheckResponse checkStatus(@RequestParam final BigDecimal latitude, @RequestParam final BigDecimal longitude) throws CoordinatesOutOfBoundsException {
+    public SurgeCheckResponse checkStatus(
+            @RequestParam("latitude") final BigDecimal latitude,
+            @RequestParam("longitude") final BigDecimal longitude) throws CoordinatesOutOfBoundsException {
         return surgeCheckService.check(new Coordinates(latitude, longitude));
     }
 

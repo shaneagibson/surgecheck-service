@@ -36,6 +36,8 @@ public class SurgeHistoryCalculatorImpl implements SurgeHistoryCalculator {
 
         final List<SurgeStatus> surgeStatusRecords = getSurgeStatusRecords(coordinates, now);
 
+        System.out.println(StringUtils.join(surgeStatusRecords, ","));
+
         final Map<Date,List<BigDecimal>> surgeMultiplierBuckets = initializeSurgeMultiplierBuckets(now);
 
         for (final SurgeStatus surgeStatus : surgeStatusRecords) {

@@ -4,6 +4,8 @@ import uk.co.epsilontechnologies.surgecheck.error.CoordinatesOutOfBoundsExceptio
 import uk.co.epsilontechnologies.surgecheck.model.Coordinates;
 import uk.co.epsilontechnologies.surgecheck.model.SurgeCheckResponse;
 
+import java.util.Date;
+
 public interface SurgeCheckService {
 
     void populateMetrics();
