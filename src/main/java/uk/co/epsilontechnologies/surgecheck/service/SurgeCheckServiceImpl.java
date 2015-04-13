@@ -78,9 +78,7 @@ public class SurgeCheckServiceImpl implements SurgeCheckService {
     }
 
     private BigDecimal lookupRealTimeSurgeMultiplier(final Coordinates coordinates) {
-        final SurgeStatus surgeStatus = uberGateway.getSurgeStatus(coordinates);
-        surgeCheckDao.persistSurgeStatus(surgeStatus);
-        return surgeStatus.getSurgeMultiplier();
+        return uberGateway.getSurgeStatus(coordinates).getSurgeMultiplier();
     }
 
 }
