@@ -6,4 +6,4 @@ This application (alongside it's Cordova client app) was developed from concept 
 
 Unfortunately, the application was in violation of Uber's Terms & Conditions (which prohibit aggregating their data), and had to be removed from the Play and App Stores.
 
-But it was a fun exercise in extremely-rapid delivery of a working product!
+But it was a fun exercise in extremely-rapid delivery of a (temporarily) working product! :)
